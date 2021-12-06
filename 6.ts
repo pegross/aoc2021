@@ -1,24 +1,43 @@
-function simulateDay(lanterns: number[]): number[] {
-  const newLanterns = [];
+class LanternSchool {
 
-  for (let idx in lanterns) {
-    if (lanterns[idx] === 0) {
-      lanterns[idx] = 6;
-      newLanterns.push(8);
-    } else {
-      lanterns[idx]--;
+  private fish: number[] = [];
+
+  constructor(initial: number[]) {
+    for (let i = 0; i <= 8; i++) {
+      this.fish[i] = 0;
+    }
+
+    for (const number of initial) {
+      this.fish[number]++;
     }
   }
 
-  return lanterns.concat(newLanterns);
+  simulateDay() {
+    const newFish = this.fish[0];
+    this.fish[0] = 0;
+
+    for (let i = 1; i < this.fish.length; i++) {
+      this.fish[i - 1] = this.fish[i];
+    }
+
+    this.fish[8] = newFish;
+    this.fish[6] += newFish;
+  }
+
+  getFishCount() {
+    return this.fish.reduce((sum, val): number => {
+      return sum += val;
+    });
+  }
 }
+
 
 const input = await Deno.readTextFile('input/6');
-let lanterns = input.split(',').map((el) => parseInt(el));
+const initial = input.split(',').map((el) => parseInt(el));
+const school = new LanternSchool(initial);
 
-for (let day = 0; day < 80; day++)
-{
-  lanterns = simulateDay(lanterns);
+for (let day = 0; day < 256; day++) {
+  school.simulateDay();
 }
 
-console.log(lanterns.length);
+console.log(school.getFishCount());
