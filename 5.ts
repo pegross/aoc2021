@@ -72,6 +72,32 @@ for (const pipe of pipes) {
       vents.rows[sourceY].tiles[from].visited++;
     }
   }
+
+  // diagonal lines
+  if ((sourceX === sourceY && targetX === targetY) || (sourceX === targetY && sourceY === targetX)) {
+    let fromX = Math.min(sourceX, targetX);
+    let toX = Math.max(sourceX, targetX);
+    let fromY = Math.min(sourceY, targetY);
+    let toY = Math.max(sourceY, targetY);
+
+    for (fromY; fromY <= toY; fromY++) {
+      if (!vents.rows[fromY]) {
+        vents.rows[fromY] = {
+          tiles: [],
+        }
+      }
+
+      for (fromX; fromX <= toX; fromX++) {
+        if (!vents.rows[sourceY].tiles[fromX]) {
+          vents.rows[sourceY].tiles[fromX] = {
+            visited: 0,
+          }
+        }
+
+        vents.rows[sourceY].tiles[fromX].visited++;
+      }
+    }
+  }
 }
 
 let overlaps = 0;
