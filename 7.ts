@@ -13,6 +13,15 @@ function median(numbers: number[]) {
 const input = await Deno.readTextFile('input/7');
 const nums = input.trim().split(',').map((el) => parseInt(el));
 const med = median(nums);
+const avg = Math.round(nums.reduce((a, b) => a + b, 0) / nums.length);
 
-const diff = nums.reduce((acc, val) => acc + Math.abs(val - med), 0);
-console.log(diff);
+const aDiff = nums.reduce((acc, val) => acc + Math.abs(val - med), 0);
+const bDiff = nums.reduce((acc, val) => {
+  const diff = Math.abs(val - avg);
+  return acc + (diff + 1) * diff / 2;
+}, 0);
+
+console.log('med', med);
+console.log('avg', avg);
+console.log('a', aDiff);
+console.log('b', bDiff);
